@@ -19,17 +19,17 @@ class App extends React.Component {
     fetch('https://api.github.com/users/diehlkj')
       .then(res1 => res1.json())                                            // Make it the object please
       .then(theData1 => {
-        //console.log("componentDidMount > Fetch-1: ", theData1);               // Look at all that DATA ooooyeah
+        console.log("componentDidMount > Fetch-1: ", theData1);               // Look at all that DATA ooooyeah
         userList.push(theData1);                                         // Put that data in that holding array pls bb
         fetch(theData1.followers_url)                                       // Look for new data from the old data
           .then(res2 => res2.json())                                        // Make it the object please pt 2 electric dataloo
           .then(theData2 => {
-            //console.log("componentDidMount > Fetch-1 > Fetch-2: ", theData2);
+            console.log("componentDidMount > Fetch-1 > Fetch-2: ", theData2);
             theData2.forEach(i => {
               fetch(i.url)
                 .then(res3 => res3.json())
                 .then(theData3 => {
-                  //console.log("componentDidMount > Fetch-1 > Fetch-2 > Fetch-3: ", theData3);
+                  console.log("componentDidMount > Fetch-1 > Fetch-2 > Fetch-3: ", theData3);
                   userList.push(theData3);
                 })
             });
@@ -59,10 +59,11 @@ class App extends React.Component {
           <img src={GitLogo} alt="GitHub Logo" />
         </div>
         <div className="cards">
-          <Cards data={this.state.data}/>
-          {/* {this.state.data.forEach(i => {
+          {/* <Cards data={this.state.data}/> */}
+          {this.state.data && this.state.data.forEach(i => {
+            console.log('Render > state forEach: ', i);
             return <Cards data={i} />
-          })} */}
+          })}
         </div>
       </div>
     );

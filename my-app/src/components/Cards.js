@@ -3,11 +3,6 @@ import '../index.css';
 
 class Cards extends React.Component {
 
-  constructor(props) {
-    super(props);
-    console.log('Cards.js > props: ', props);
-  }
-
   render() {
     return (
       <div className="card">
