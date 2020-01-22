@@ -1,0 +1,72 @@
+import React from 'react';
+import Cards from './components/Cards';
+import LambdaLogo from './assets/lambdalogo.png';
+import GitLogo from './assets/githublogo.png';
+import './index.css';
+
+class App extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      data: []
+    };
+  }
+
+  componentDidMount() {
+    let userList = [];
+
+    fetch('https://api.github.com/users/diehlkj')
+      .then(res1 => res1.json())                                            // Make it the object please
+      .then(theData1 => {
+        //console.log("componentDidMount > Fetch-1: ", theData1);               // Look at all that DATA ooooyeah
+        userList.push(theData1);                                         // Put that data in that holding array pls bb
+        fetch(theData1.followers_url)                                       // Look for new data from the old data
+          .then(res2 => res2.json())                                        // Make it the object please pt 2 electric dataloo
+          .then(theData2 => {
+            //console.log("componentDidMount > Fetch-1 > Fetch-2: ", theData2);
+            theData2.forEach(i => {
+              fetch(i.url)
+                .then(res3 => res3.json())
+                .then(theData3 => {
+                  //console.log("componentDidMount > Fetch-1 > Fetch-2 > Fetch-3: ", theData3);
+                  userList.push(theData3);
+                })
+            });
+          })
+      })
+      .then(console.log('EVERYTHING HAS DONE THE STUFF HERE IS THE USER LIST', userList))
+      .then(this.setState({data: userList}))
+      .then(console.log('State after everything has been added to it', this.state.data))
+      .catch(err => `Uh-oh oopsie... There was a pwoblem haha: ${err}`);    // Please no
+
+
+      // userList.forEach(i => {
+      //   this.setState({ ...this.state, data: i})
+      // })
+  }
+
+  componentDidUpdate() {
+    console.log("componentDidUpdate: this.state: ", this.state.data);
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="header">
+          <img src={LambdaLogo} alt="Lambda Logo"/>
+          <p>❤️'s</p>
+          <img src={GitLogo} alt="GitHub Logo" />
+        </div>
+        <div className="cards">
+          <Cards data={this.state.data}/>
+          {/* {this.state.data.forEach(i => {
+            return <Cards data={i} />
+          })} */}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
